@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>网站发布说明</title>
+  <link rel="stylesheet" href="../assets/site.css">
+</head>
+<body class="report-page">
+
+<header class="site-bar">
+  <a href="../index.html" class="brand">煤焦市场报告库</a>
+  <a href="../md/report-16.md" class="ghost-link">原始 Markdown</a>
+</header>
+<main class="report-layout">
+  <aside class="report-side">
+    <div class="meta-block">
+      <span>国际煤焦综合日报</span>
+      <strong>2026年07月01日</strong>
+    </div>
+    <nav class="toc" aria-label="目录"><a class="toc-level-2" href="#内网访问">内网访问</a>
+<a class="toc-level-2" href="#知道链接即可访问">知道链接即可访问</a>
+<a class="toc-level-3" href="#github-pages">GitHub Pages</a>
+<a class="toc-level-3" href="#cloudflare-pages">Cloudflare Pages</a>
+<a class="toc-level-2" href="#cloudflare-access-私密分享">Cloudflare Access 私密分享</a>
+<a class="toc-level-2" href="#普通公网静态站">普通公网静态站</a>
+<a class="toc-level-2" href="#更新内容">更新内容</a></nav>
+  </aside>
+  <article class="markdown-body">
+    <h1 id="网站发布说明">网站发布说明</h1>
+<p>本目录已生成静态网站，入口为：</p>
+<ul>
+<li><code>website/index.html</code></li>
+<li><code>website/reports/</code>：由 Markdown 转换出的网页报告</li>
+<li><code>website/md/</code>：原始 Markdown 文件副本</li>
+</ul>
+<h2 id="内网访问">内网访问</h2>
+<p>如需本机预览，或配合 Cloudflare Tunnel 对外分享，在本目录运行：</p>
+<p>``<code>powershell .\start_website_server.ps1 </code>``</p>
+<p>脚本会输出本机访问地址。默认只绑定 <code>127.0.0.1</code>，不会直接暴露到局域网。</p>
+<p>停止服务：</p>
+<p>``<code>powershell .\stop_website_server.ps1 </code>``</p>
+<h2 id="知道链接即可访问">知道链接即可访问</h2>
+<p>如果不需要指定邮箱验证，只想“知道链接的人能看”，可以用 GitHub Pages 或 Cloudflare Pages。</p>
+<h3 id="github-pages">GitHub Pages</h3>
+<ol>
+<li>在 GitHub 新建仓库，建议仓库名使用随机一些的名字，例如 <code>coal-report-7x4q29</code>。</li>
+<li>仓库可设为 <code>Public</code>。如果要用私有仓库发布 Pages，需要 GitHub 付费/组织计划支持。</li>
+<li>打开仓库，点 <code>Add file</code> -&gt; <code>Upload files</code>。</li>
+<li>把本目录 <code>github-pages</code> 文件夹里的所有内容拖进去，不要只上传 zip。</li>
+<li>Commit 后进入 <code>Settings</code> -&gt; <code>Pages</code>。</li>
+<li>Source 选择 <code>Deploy from a branch</code>，Branch 选 <code>main</code>，Folder 选 <code>/root</code>，保存。</li>
+<li>等 1-10 分钟，访问 <code>https://你的用户名.github.io/仓库名/</code>。</li>
+</ol>
+<p>当前站点已包含 <code>.nojekyll</code>、<code>robots.txt</code> 和 <code>noindex</code>，用于减少 GitHub Pages 处理干扰并降低搜索引擎收录概率。但这不是权限控制，链接被转发后，拿到链接的人仍然可以访问。</p>
+<h3 id="cloudflare-pages">Cloudflare Pages</h3>
+<p>如果不需要指定邮箱验证，只想“知道链接的人能看”，也可以用 Cloudflare Pages：</p>
+<ol>
+<li>打开 Cloudflare Dashboard。</li>
+<li>进入 <code>Workers &amp; Pages</code>。</li>
+<li>选择 <code>Create application</code>。</li>
+<li>选择 <code>Pages</code> / <code>Upload assets</code> / <code>Drag and drop</code>。</li>
+<li>上传本目录里的 <code>website-cloudflare-upload.zip</code>，或直接拖入 <code>website</code> 文件夹。</li>
+<li>部署完成后，把 Cloudflare 给出的 <code>https://项目名.pages.dev</code> 链接发给对方。</li>
+</ol>
+<p>当前站点已包含 <code>robots.txt</code>、<code>noindex</code> 和 <code>X-Robots-Tag</code>，用于降低搜索引擎收录概率。但这不是权限控制，链接被转发后，拿到链接的人仍然可以访问。</p>
+<p>如需更不容易被猜到，可使用随机项目名，例如 <code>coal-report-7x4q29</code>。</p>
+<h2 id="cloudflare-access-私密分享">Cloudflare Access 私密分享</h2>
+<p>如果之后需要改成“只有指定邮箱能看”，再使用 Cloudflare Tunnel + Access：</p>
+<ol>
+<li>在 Cloudflare 托管一个域名，例如 <code>example.com</code>。</li>
+<li>在 Zero Trust 里创建 Access application，域名使用 <code>reports.example.com</code>。</li>
+<li>Access policy 选择 <code>Allow</code>，Include 填指定人员邮箱。</li>
+<li>在本机运行 <code>.\start_website_server.ps1</code>。</li>
+<li>创建 Cloudflare Tunnel，把 <code>reports.example.com</code> 指向本机脚本输出的 <code>http://127.0.0.1:端口</code>。</li>
+</ol>
+<h2 id="普通公网静态站">普通公网静态站</h2>
+<p>把整个 <code>website</code> 文件夹上传到任意静态网站托管服务即可，例如公司 Web 服务器、对象存储静态网站、GitHub Pages、Cloudflare Pages、Netlify 或 Vercel。入口文件是 <code>index.html</code>。</p>
+<h2 id="更新内容">更新内容</h2>
+<p>修改或新增当前目录下的 <code>.md</code> 文件后，运行：</p>
+<p>``<code>powershell python build_site.py </code>``</p>
+<p>即可重新生成网站。</p>
+  </article>
+</main>
+
+</body>
+</html>
