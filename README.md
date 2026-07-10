@@ -2,7 +2,6 @@
 
 本仓库用于发布 2026-06-22 至 2026-07-09 煤焦市场报告。
 
-- 网站首页：[index.html](index.html)
 - Markdown 原文目录：[md/](md/)
 
 ## 各期 Markdown
